@@ -4,7 +4,7 @@ import { DexSpecies, DexMove, DexItem, DexAbility, DexNature, TeamSlot, DexLearn
 import { PokemonCard } from "./PokemonCard";
 import { PokemonSet } from "@/lib/types";
 import { Spinner } from "./Spinner";
-
+import ReactMarkdown from "react-markdown"
 
 type TeamBuilderProps = {
   pokemon: DexSpecies[];
@@ -194,7 +194,9 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                     {/* Analysis */}
                     <div className="bg-gray-900 p-4 rounded-xl border border-gray-700">
                         <h2 className="text-xl font-semibold text-white mb-2">Analysis</h2>
-                        <p className="text-gray-300 whitespace-pre-wrap">{result.analysis}</p>
+                        <div className="text-gray-300 whitespace-pre-wrap">
+                            <ReactMarkdown>{result.analysis}</ReactMarkdown>
+                        </div>
                     </div>
                 </div>
             )}
