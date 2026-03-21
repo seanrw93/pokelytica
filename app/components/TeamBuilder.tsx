@@ -95,7 +95,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                     
                     {/* Team A */}
                     <div className="bg-gray-900 p-4 rounded-xl border border-gray-700 shadow-md">
-                        <h2 className="text-xl font-semibold mb-4 text-white">Team A</h2>
+                        <h2 className="text-xl font-semibold mb-4 text-white">Player</h2>
                         <div className="space-y-4">
                             {teamA.map((slot, i) => (
                             <div
@@ -121,7 +121,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
 
                     {/* Team B */}
                     <div className="bg-gray-900 p-4 rounded-xl border border-gray-700 shadow-md">
-                        <h2 className="text-xl font-semibold mb-4 text-white">Team B</h2>
+                        <h2 className="text-xl font-semibold mb-4 text-white">Opponent</h2>
                         <div className="space-y-4">
                             {teamB.map((slot, i) => (
                                 <div
