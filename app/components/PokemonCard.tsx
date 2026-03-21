@@ -66,6 +66,7 @@ export const PokemonCard = ({
 
       {/* Header / Toggle */}
       <button
+        type="button"
         onClick={() => setIsOpen(prev => !prev)}
         className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
       >

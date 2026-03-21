@@ -54,7 +54,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
 
     const runSimulation = async (e: React.SubmitEvent | React.MouseEvent) => {
         e.preventDefault();
-
+        console.log("running simulation")
         setLoading(true);
         setError(null);
 
@@ -124,40 +124,40 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                         <h2 className="text-xl font-semibold mb-4 text-white">Team B</h2>
                         <div className="space-y-4">
                             {teamB.map((slot, i) => (
-                            <div
-                                key={i}
-                                className="bg-gray-800 p-4 rounded-lg border border-gray-700 shadow-sm"
-                            >
-                                <PokemonCard
-                                    index={i}
-                                    speciesList={pokemon}
-                                    moves={moves}
-                                    learnsets={learnsets}
-                                    items={items}
-                                    abilities={abilities}
-                                    natures={natures}
-                                    onChange={(slotIndex, updated) =>
-                                        updateTeam(teamB, setTeamB, slotIndex, updated)
-                                    }
-                                />
-                            </div>
+                                <div
+                                    key={i}
+                                    className="bg-gray-800 p-4 rounded-lg border border-gray-700 shadow-sm"
+                                >
+                                    <PokemonCard
+                                        index={i}
+                                        speciesList={pokemon}
+                                        moves={moves}
+                                        learnsets={learnsets}
+                                        items={items}
+                                        abilities={abilities}
+                                        natures={natures}
+                                        onChange={(slotIndex, updated) =>
+                                            updateTeam(teamB, setTeamB, slotIndex, updated)
+                                        }
+                                    />
+                                </div>
                             ))}
                         </div>
                     </div>
                 </div>
 
-                <div className={`${!error && "hidden"} mt-3 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700`}>
-                    {error}
-                </div>
-
+                {error && (
+                    <div className="mt-3 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {error}
+                    </div>
+                )}
 
                 {/* Run Simulation Button */}
-                {!loading ? (
+                {loading ? (
                     <Spinner />
                 ) : (
                     <button
-                        onClick={runSimulation}
-                        className="bg-blue-600 hover:bg-blue-500 disabled:bg-blue-900 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-semibold"
+                        className="bg-blue-600 hover:bg-blue-500 disabled:bg-blue-900 disabled:cursor-not-allowed text-white mt-4 px-6 py-3 rounded-lg font-semibold"
                     >
                         Run simulation
                     </button>
@@ -165,39 +165,39 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
             </form>
 
             {/* AI battle analysis and log */}
-           {result && (
-  <div className="mt-6 space-y-4">
-    {/* Win percentage bar */}
-    <div className="bg-gray-900 p-4 rounded-xl border border-gray-700">
-      <h2 className="text-xl font-semibold text-white mb-4">Results ({result.totalBattles} battles)</h2>
-      <div className="flex rounded-full overflow-hidden h-8 mb-2">
-        <div
-          className="bg-blue-600 flex items-center justify-center text-white text-sm font-semibold"
-          style={{ width: `${result.p1WinPct}%` }}
-        >
-          {result.p1WinPct}%
-        </div>
-        <div
-          className="bg-red-600 flex items-center justify-center text-white text-sm font-semibold"
-          style={{ width: `${result.p2WinPct}%` }}
-        >
-          {result.p2WinPct}%
-        </div>
-      </div>
-      <div className="flex justify-between text-sm text-gray-400">
-        <span>🔵 Team A — {result.p1Wins} wins</span>
-        <span>Ties — {result.ties}</span>
-        <span>{result.p2Wins} wins — Team B 🔴</span>
-      </div>
-    </div>
+            {result && (
+                <div className="mt-6 space-y-4">
+                    {/* Win percentage bar */}
+                    <div className="bg-gray-900 p-4 rounded-xl border border-gray-700">
+                        <h2 className="text-xl font-semibold text-white mb-4">Results ({result.totalBattles} battles)</h2>
+                        <div className="flex rounded-full overflow-hidden h-8 mb-2">
+                            <div
+                                className="bg-blue-600 flex items-center justify-center text-white text-sm font-semibold"
+                                style={{ width: `${result.p1WinPct}%` }}
+                            >
+                            {result.p1WinPct}%
+                            </div>
+                            <div
+                            className="bg-red-600 flex items-center justify-center text-white text-sm font-semibold"
+                            style={{ width: `${result.p2WinPct}%` }}
+                            >
+                            {result.p2WinPct}%
+                            </div>
+                        </div>
+                        <div className="flex justify-between text-sm text-gray-400">
+                            <span>🔵 Team A — {result.p1Wins} wins</span>
+                            <span>Ties — {result.ties}</span>
+                            <span>{result.p2Wins} wins — Team B 🔴</span>
+                        </div>
+                    </div>
 
-    {/* Analysis */}
-    <div className="bg-gray-900 p-4 rounded-xl border border-gray-700">
-      <h2 className="text-xl font-semibold text-white mb-2">Analysis</h2>
-      <p className="text-gray-300 whitespace-pre-wrap">{result.analysis}</p>
-    </div>
-  </div>
-)}
+                    {/* Analysis */}
+                    <div className="bg-gray-900 p-4 rounded-xl border border-gray-700">
+                        <h2 className="text-xl font-semibold text-white mb-2">Analysis</h2>
+                        <p className="text-gray-300 whitespace-pre-wrap">{result.analysis}</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
