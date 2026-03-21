@@ -1,9 +1,11 @@
 import { Learnset } from "@pkmn/dex";
 import { TeamBuilder } from "../components/TeamBuilder";
 
-const baseUrl = process.env.NODE_ENV === "production"
-                    ? process.env.CLIENT_URL
-                    : "http://localhost:3000"
+const baseUrl = process.env.VERCEL_URL 
+  ? `https://${process.env.VERCEL_URL}` 
+  : "http://localhost:3000";
+
+export const dynamic = 'force-dynamic';
 
 const Page = async () => {
     const [pokemon, moves, items, abilities, natures, learnsets] = await Promise.all([
@@ -17,14 +19,14 @@ const Page = async () => {
 
     return (
         <TeamBuilder
-            pokemon={pokemon}
-            moves={moves}
-            items={items}
-            abilities={abilities}
-            natures={natures}
-            learnsets={learnsets}
+            pokemon={Array.isArray(pokemon) ? pokemon : []}
+            moves={Array.isArray(moves) ? moves : []}
+            items={Array.isArray(items) ? items : []}
+            abilities={Array.isArray(abilities) ? abilities : []}
+            natures={Array.isArray(natures) ? natures : []}
+            learnsets={Array.isArray(learnsets) ? learnsets : []}
         />
-  );
+    );
 }
 
 export default Page;

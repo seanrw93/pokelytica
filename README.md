@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pokelytica
 
-## Getting Started
+A Pokémon battle outcome predictor that lets you build two teams, simulate 100 battles between them, and receive AI-powered analysis of the results — including win probabilities, team strengths and weaknesses, and improvement suggestions.
 
-First, run the development server:
+## What it does
+
+You build two teams of up to 6 Pokémon each using a team builder UI. Each Pokémon card lets you select a species, item, ability, nature, and up to 4 moves — with move options filtered to only show moves that Pokémon can actually learn. Once both teams are set, you run a simulation that plays out 100 battles using the Pokémon Showdown battle engine. The results are then sent to an LLM which analyses the matchup and gives you actionable feedback.
+
+## Tech stack
+
+- **Next.js** (App Router, TypeScript)
+- **Tailwind CSS**
+- **@pkmn/sim** — Pokémon Showdown's battle engine
+- **@pkmn/dex** — Pokémon data layer
+- **@smogon/calc** — damage calculator
+- **Groq** (`llama-3.3-70b-versatile`) — battle analysis
+- **@headlessui/react** — combobox components
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 18+
+- A free [Groq API key](https://console.groq.com)
+
+### Installation
+
+```bash
+git clone https://github.com/seanrw93/pokelytica.git
+cd pokelytica
+npm install
+```
+
+### Environment variables
+
+Create a `.env.local` file in the root of the project:
+
+```
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+### Running locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Note: the first request to the simulate endpoint will be slow in dev mode (~1-2 minutes) as Next.js compiles the heavy `@pkmn/sim` dependency on demand. Subsequent requests will be significantly faster.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How the simulation works
 
-## Learn More
+Each of the 100 battles is run server-side using `@pkmn/sim` with `RandomPlayerAI` making move decisions for both sides. After all battles complete, the win/loss/tie counts are tallied and a representative battle log from the final battle is sent to Groq alongside the team compositions and statistics. The LLM then produces a structured analysis covering win probability, strengths, weaknesses, and improvement suggestions.
 
-To learn more about Next.js, take a look at the following resources:
+## Roadmap
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Heuristic AI using `@smogon/calc` for smarter move selection
+- EV/IV editor per Pokémon
+- Support for more battle formats
+- Battle log viewer
+- Export team as Showdown paste
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Data
 
-## Deploy on Vercel
+All Pokémon data (species, moves, items, abilities, natures, learnsets) is sourced from the Pokémon Showdown data layer via `@pkmn/dex` and served through local Next.js API routes.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
