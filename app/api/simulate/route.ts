@@ -111,8 +111,9 @@ export const POST = async (req: NextRequest) => {
     const p1Team = teamA.filter(Boolean).map(toShowdownSet);
     const p2Team = teamB.filter(Boolean).map(toShowdownSet);
 
+    // Validation
     if (!p1Team.length || !p2Team.length) {
-      return NextResponse.json({ error: 'Both teams must have at least one Pokémon' }, { status: 400 });
+      return NextResponse.json({ error: 'Both teams must include at least one Pokémon' }, { status: 400 });
     }
 
     const NUM_BATTLES = 100;

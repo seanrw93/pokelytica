@@ -71,7 +71,7 @@ export const PokemonCard = ({
         className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
       >
         <div className="flex justify-between w-full">
-          <span className="text-lg font-semibold text-white align-middle">
+          <span className="flex place-items-center text-lg font-semibold text-white">
             {species ?? `Pokémon ${index + 1}`}
           </span>
           {species && (
