@@ -23,7 +23,6 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
     const [teamB, setTeamB] = useState<TeamSlot[]>(Array(6).fill(null));
     const [teamAKey, setTeamAKey] = useState(0);
     const [teamBKey, setTeamBKey] = useState(0);
-
     const [result, setResult] = useState<BattleOutcome | null>(null);    
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -113,7 +112,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                     <div className="bg-gray-900 p-4 rounded-xl border border-gray-700 shadow-md">
                         <h2 className="text-xl font-semibold mb-4 text-white">Player</h2>
                         <div className="space-y-4">
-                            {teamA.map((slot, i) => (
+                            {teamA.map((_, i) => (
                             <div
                                 key={`${teamAKey}-${i}`}
                                 className="bg-gray-800 p-4 rounded-lg border border-gray-700 shadow-sm"
@@ -142,9 +141,9 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                     <div className="bg-gray-900 p-4 rounded-xl border border-gray-700 shadow-md">
                         <h2 className="text-xl font-semibold mb-4 text-white">Opponent</h2>
                         <div className="space-y-4">
-                            {teamB.map((slot, i) => (
+                            {teamB.map((_, i) => (
                                 <div
-                                    key={`${teamAKey}-${i}`}
+                                    key={`${teamBKey}-${i}`}
                                     className="bg-gray-800 p-4 rounded-lg border border-gray-700 shadow-sm"
                                 >
                                     <PokemonCard
@@ -179,7 +178,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                     <Spinner />
                 ) : (
                     <button
-                        className="bg-blue-600 hover:bg-blue-500 disabled:bg-blue-900 disabled:cursor-not-allowed text-white mt-4 px-6 py-3 rounded-lg font-semibold"
+                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 disabled:bg-blue-900 disabled:cursor-not-allowed text-white mt-4 px-6 py-3 rounded-lg font-semibold"
                     >
                         Run simulation
                     </button>

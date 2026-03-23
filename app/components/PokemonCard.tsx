@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { DexSpecies, DexMove, DexItem, DexAbility, DexNature, DexLearnset } from "@/lib/types";
 import { ItemSearchSelect } from "./ItemSearchSelect";
 import { getSpriteUrl } from "../utils/getSprite";
@@ -35,8 +35,8 @@ export const PokemonCard = ({
   const [selectedMoves, setSelectedMoves] = useState<(DexMove | null)[]>(Array(4).fill(null));
 
   
-  const selectedSpecies = speciesList.find(s => s.name === species);
-  const learnset = learnsets.find(l => l.id === selectedSpecies?.id)?.learnset ?? {};
+  const selectedSpecies = useMemo(() => speciesList.find(s => s.name === species), [speciesList, species]);
+  const learnset = useMemo(() => learnsets.find(l => l.id === selectedSpecies?.id)?.learnset ?? {}, [learnsets, selectedSpecies]);
 
   const availableMoves = moves.filter(move => {
     return learnset.hasOwnProperty(move.id);  

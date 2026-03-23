@@ -1,5 +1,7 @@
-import { Combobox } from "@headlessui/react";
-import { useState } from "react";
+"use client";
+
+import { Combobox, ComboboxOptions } from "@headlessui/react";
+import { useState, useMemo } from "react";
 
 type ItemSearchSelectProps = {
   options: string[];                 
@@ -20,12 +22,12 @@ export const ItemSearchSelect = ({
 }: ItemSearchSelectProps) => {
   const [query, setQuery] = useState("");
 
-  const filtered =
+  const filtered = useMemo(() =>
     query === ""
       ? options
-      : options.filter((opt) =>
-          opt.toLowerCase().includes(query.toLowerCase())
-        );
+      : options.filter(opt => opt.toLowerCase().includes(query.toLowerCase())),
+    [options, query]
+  );
 
   return (
     <Combobox value={value} onChange={onChange}>
