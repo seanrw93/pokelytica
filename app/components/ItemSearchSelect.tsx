@@ -22,12 +22,12 @@ export const ItemSearchSelect = ({
 }: ItemSearchSelectProps) => {
   const [query, setQuery] = useState("");
 
-  const filtered = useMemo(() =>
-    query === ""
+  const filtered = useMemo(() => {
+    const results = query === ""
       ? options
-      : options.filter(opt => opt.toLowerCase().includes(query.toLowerCase())),
-    [options, query]
-  );
+      : options.filter(opt => opt.toLowerCase().includes(query.toLowerCase()));
+    return results.slice(0, 50);
+  }, [options, query]);
 
   return (
     <Combobox value={value} onChange={onChange}>
