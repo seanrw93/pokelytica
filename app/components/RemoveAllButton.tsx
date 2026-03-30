@@ -25,8 +25,8 @@ export const RemoveAllButton = ({ onRemoveAll }: RemoveAllButtonProps) => {
             onClick={handleClick}
             className={`w-full mb-2 sm:mb-0 sm:w-auto sm:mr-4 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 cursor-pointer
                 ${confirming
-                    ? 'bg-red-600 hover:bg-red-500 text-white'
-                    : 'bg-transparent border border-red-700 text-red-400 hover:bg-red-700 hover:text-white'
+                    ? 'bg-[var(--error)] hover:bg-[var(--accent-red-hover)] text-white'
+                    : 'bg-transparent border border-[var(--error)] text-[var(--error)] hover:bg-[var(--error)] hover:text-white'
                 }`}
         >
             {confirming ? 'Are you sure?' : 'Remove all Pokémon'}
@@ -35,12 +35,11 @@ export const RemoveAllButton = ({ onRemoveAll }: RemoveAllButtonProps) => {
             <button
                 type="button"
                 onClick={() => setConfirming(false)}
-                className="w-full sm:w-auto px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 cursor-pointer bg-transparent border border-gray-600 text-gray-400 hover:bg-gray-700 hover:text-white"            
+                className="w-full sm:w-auto px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 cursor-pointer bg-transparent border border-[var(--border)] text-[var(--muted)] hover:bg-[var(--surface-raised)] hover:text-[var(--foreground)]"
             >
                 Cancel
             </button>
         )}
     </div>
-
   );
 }

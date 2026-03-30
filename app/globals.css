@@ -1,29 +1,91 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --font-default: #171717; 
+  /* Base */
+  --background: #0f0f1a;
+  --surface: #1a1a2e;
+  --surface-raised: #222240;
+  --border: #2e2e50;
+
+  /* Typography */
+  --foreground: #e8e8f0;
+  --muted: #7878a0;
+  --muted-light: #a0a0c0;
+
+  /* Brand accents */
+  --accent-red: #e3350d;
+  --accent-red-hover: #ff4520;
+  --accent-yellow: #ffcb05;
+  --accent-yellow-hover: #ffd83d;
+  --accent-blue: #3d7dca;
+  --accent-blue-hover: #5a99e8;
+
+  /* Pokémon type colours */
+  --type-normal: #a8a878;
+  --type-fire: #ff7c24;
+  --type-water: #6390f0;
+  --type-grass: #7ac74c;
+  --type-electric: #f7d02c;
+  --type-ice: #96d9d6;
+  --type-fighting: #c22e28;
+  --type-poison: #a33ea1;
+  --type-ground: #e2bf65;
+  --type-flying: #a98ff3;
+  --type-psychic: #f95587;
+  --type-bug: #a6b91a;
+  --type-rock: #b6a136;
+  --type-ghost: #735797;
+  --type-dragon: #6f35fc;
+  --type-dark: #705746;
+  --type-steel: #b7b7ce;
+  --type-fairy: #d685ad;
+
+  /* Stat bar colours */
+  --stat-hp: #ff5959;
+  --stat-attack: #f5ac78;
+  --stat-defense: #fae078;
+  --stat-sp-atk: #9db7f5;
+  --stat-sp-def: #a7db8d;
+  --stat-speed: #fa92b2;
+
+  /* UI feedback */
+  --success: #4caf82;
+  --warning: #ffcb05;
+  --error: #e3350d;
+  --info: #3d7dca;
+
+  /* Font */
+  --font-default: #e8e8f0;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-accent-red: var(--accent-red);
+  --color-accent-yellow: var(--accent-yellow);
+  --color-accent-blue: var(--accent-blue);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-default-color: var(--font-default)
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --font-default: #ededed;
-  }
+  --font-default-color: var(--font-default);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
 }

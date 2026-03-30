@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { DexSpecies, DexMove, DexItem, DexAbility, DexNature, TeamSlot, DexLearnset, BattleOutcome } from "@/lib/types";
+import { DexSpecies, DexMove, DexItem, DexAbility, DexNature, TeamSlot, DexLearnset, BattleOutcome, Stats } from "@/lib/types";
 import { PokemonCard } from "./PokemonCard";
 import { WinPercentrageBar } from "./WinPercentrageBar";
 import { BattleAnalysis } from "./BattleAnalysis";
@@ -43,7 +43,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                 nature: null,
                 level: 50,
                 evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-                ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
+                ivs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
                 moves: []
             };
         }
@@ -102,20 +102,20 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
     return (
         <div className="p-6 space-y-8">
 
-            <h1 className="font-default-color text-3xl font-bold l">Team Builder</h1>
+            <h1 className="text-3xl font-bold text-foreground">Team Builder</h1>
 
             <form onSubmit={runSimulation}>
                 {/* Two-team responsive layout */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     
                     {/* Team A */}
-                    <div className="bg-gray-900 p-4 rounded-xl border border-gray-700 shadow-md">
-                        <h2 className="text-xl font-semibold mb-4 text-white">Player</h2>
+                    <div className="bg-surface p-4 rounded-xl border border-border shadow-md">
+                        <h2 className="text-xl font-semibold mb-4 text-accent-yellow">Player</h2>
                         <div className="space-y-4">
-                            {teamA.map((_, i) => (
+                            {teamA.map((slot, i) => (
                             <div
                                 key={`${teamAKey}-${i}`}
-                                className="bg-gray-800 p-4 rounded-lg border border-gray-700 shadow-sm"
+                                className="bg-surface-raised p-4 rounded-lg border border-border shadow-sm"
                             >
                                 <PokemonCard
                                     index={i}
@@ -138,13 +138,13 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                     </div>
 
                     {/* Team B */}
-                    <div className="bg-gray-900 p-4 rounded-xl border border-gray-700 shadow-md">
-                        <h2 className="text-xl font-semibold mb-4 text-white">Opponent</h2>
+                    <div className="bg-surface p-4 rounded-xl border border-border shadow-md">
+                        <h2 className="text-xl font-semibold mb-4 text-accent-red">Opponent</h2>
                         <div className="space-y-4">
-                            {teamB.map((_, i) => (
+                            {teamB.map((slot, i) => (
                                 <div
                                     key={`${teamBKey}-${i}`}
-                                    className="bg-gray-800 p-4 rounded-lg border border-gray-700 shadow-sm"
+                                    className="bg-surface-raised p-4 rounded-lg border border-border shadow-sm"
                                 >
                                     <PokemonCard
                                         index={i}
@@ -168,7 +168,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                 </div>
 
                 {error && (
-                    <div className="mt-3 text-center rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    <div className="mt-3 text-center rounded-md border border-error bg-surface px-4 py-3 text-sm text-[var(--error)]">
                         {error}
                     </div>
                 )}
@@ -178,7 +178,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                     <Spinner />
                 ) : (
                     <button
-                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 disabled:bg-blue-900 disabled:cursor-not-allowed text-white mt-4 px-6 py-3 rounded-lg font-semibold"
+                        className="w-full sm:w-auto bg-accent-yellow hover:bg-[var(--accent-yellow-hover)] disabled:opacity-40 disabled:cursor-not-allowed text-surface mt-4 px-6 py-3 rounded-lg font-semibold sm:rounded-full sm:mx-auto transition-colors duration-200 cursor-pointer"
                     >
                         Run simulation
                     </button>
@@ -188,7 +188,6 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
             {/* AI battle analysis and log */}
             {result && (
                 <div className="mt-6 space-y-4">
-                    {/* Win percentage bar */}
                     <WinPercentrageBar 
                         totalBattles={result.totalBattles}
                         p1WinPct={result.p1WinPct}
@@ -197,8 +196,6 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                         p2Wins={result.p2Wins}
                         ties={result.ties}
                     />
-
-                    {/* Analysis */}
                     <BattleAnalysis analysis={result.analysis} />
                 </div>
             )}
