@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useScrollIntoView } from "../hooks/useScrollIntoView";
 import { DexSpecies, DexMove, DexItem, DexAbility, DexNature, TeamSlot, DexLearnset, BattleOutcome, Stats } from "@/lib/types";
 import { PokemonCard } from "./PokemonCard";
 import { WinPercentrageBar } from "./WinPercentrageBar";
@@ -8,6 +9,7 @@ import { BattleAnalysis } from "./BattleAnalysis";
 import { Spinner } from "./Spinner";
 import { PokemonSet } from "@/lib/types";
 import { RemoveAllButton } from "./RemoveAllButton";
+import { motion } from "motion/react"
 
 type TeamBuilderProps = {
   pokemon: DexSpecies[];
@@ -26,6 +28,8 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
     const [result, setResult] = useState<BattleOutcome | null>(null);    
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const targetRef = useRef<HTMLDivElement | null>(null);
 
     const updateTeam = (
         team: TeamSlot[],
@@ -99,17 +103,43 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
         }
     };
 
+    useScrollIntoView({ targetRef, deps: [result] });
+
     return (
         <div className="p-6 space-y-8">
 
-            <h1 className="text-3xl font-bold text-foreground">Team Builder</h1>
+            <motion.h1 
+                className="text-3xl font-bold text-foreground"
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 12,
+                    mass: 0.8,
+                    delay: 0.3
+                }}
+            >
+                Team Builder
+            </motion.h1>
 
             <form onSubmit={runSimulation}>
                 {/* Two-team responsive layout */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     
                     {/* Team A */}
-                    <div className="bg-surface p-4 rounded-xl border border-border shadow-md">
+                    <motion.div 
+                        className="bg-surface p-4 rounded-xl border border-border shadow-md"
+                        initial={{ x: -100, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 120,
+                            damping: 12,
+                            mass: 0.8,
+                            delay: 0.3
+                        }}
+                    >
                         <h2 className="text-xl font-semibold mb-4 text-accent-yellow">Player</h2>
                         <div className="space-y-4">
                             {teamA.map((slot, i) => (
@@ -135,10 +165,21 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                         {hasAnyPokemon(teamA) && (
                             <RemoveAllButton onRemoveAll={() => handleRemoveAll(setTeamA, setTeamAKey)} />
                         )}
-                    </div>
+                    </motion.div>
 
                     {/* Team B */}
-                    <div className="bg-surface p-4 rounded-xl border border-border shadow-md">
+                    <motion.div 
+                        className="bg-surface p-4 rounded-xl border border-border shadow-md"
+                        initial={{ x: 100, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 120,
+                            damping: 12,
+                            mass: 0.8,
+                            delay: 0.3
+                        }}
+                    >
                         <h2 className="text-xl font-semibold mb-4 text-accent-red">Opponent</h2>
                         <div className="space-y-4">
                             {teamB.map((slot, i) => (
@@ -164,7 +205,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                         {hasAnyPokemon(teamB) && (
                             <RemoveAllButton onRemoveAll={() => handleRemoveAll(setTeamB, setTeamBKey)} />
                         )}
-                    </div>
+                    </motion.div>
                 </div>
 
                 {error && (
@@ -177,17 +218,31 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                 {loading ? (
                     <Spinner />
                 ) : (
-                    <button
-                        className="w-full sm:w-auto bg-accent-yellow hover:bg-[var(--accent-yellow-hover)] disabled:opacity-40 disabled:cursor-not-allowed text-surface mt-4 px-6 py-3 rounded-lg font-semibold sm:rounded-full sm:mx-auto transition-colors duration-200 cursor-pointer"
+                    <motion.div
+                        className="flex justify-center mt-8"
+                        initial={{ y: 100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 120,
+                            damping: 12,
+                            mass: 0.8,
+                            delay: 0.3
+                        }}
                     >
-                        Run simulation
-                    </button>
+                        <button
+                            className="w-full sm:w-auto bg-accent-yellow hover:bg-[var(--accent-yellow-hover)] disabled:opacity-40 disabled:cursor-not-allowed text-surface px-6 py-3 rounded-lg font-semibold sm:rounded-full transition-colors duration-200 cursor-pointer"
+                            
+                        >
+                            Run simulation
+                        </button>
+                    </motion.div>
                 )}
             </form>
 
             {/* AI battle analysis and log */}
             {result && (
-                <div className="mt-6 space-y-4">
+                <div ref={targetRef} className="mt-6 space-y-4">
                     <WinPercentrageBar 
                         totalBattles={result.totalBattles}
                         p1WinPct={result.p1WinPct}
