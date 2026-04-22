@@ -5,5 +5,12 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
-  plugins: [require('@tailwindcss/typography')]
+  theme: {
+    extend: {
+      fontFamily: {
+        pocket: ["var(--font-pocket-monk)", "system-ui"],
+      },
+    },
+  },
+  plugins: [require("@tailwindcss/typography")],
 } satisfies Config;

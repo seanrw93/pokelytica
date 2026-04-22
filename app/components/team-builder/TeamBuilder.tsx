@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useScrollIntoView } from "../hooks/useScrollIntoView";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DexSpecies, DexMove, DexItem, DexAbility, DexNature, TeamSlot, DexLearnset, BattleOutcome, Stats } from "@/lib/types";
 import { PokemonCard } from "./PokemonCard";
 import { WinPercentrageBar } from "./WinPercentrageBar";

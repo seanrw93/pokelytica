@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { DexSpecies, DexMove, DexItem, DexAbility, DexNature, DexLearnset, Stats } from "@/lib/types";
 import { ItemSearchSelect } from "./ItemSearchSelect";
 import { StatEditor } from "./StatEditor";
-import { getSpriteUrl } from "../utils/getSprite";
+import { getSpriteUrl } from "../../utils/getSprite";
 
 type PokemonCardProps = {
   index: number;
@@ -37,6 +37,7 @@ export const PokemonCard = ({
   const [evs, setEvs] = useState<Stats>({ hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 });
   const [ivs, setIvs] = useState<Stats>({ hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 });
   const [advancedIsChecked, setAdvancedIsChecked] = useState(false);
+  const [spriteLoaded, setSpriteLoaded] = useState<Boolean | null>(null);
 
   const selectedSpecies = useMemo(() => speciesList.find(s => s.name === species), [speciesList, species]);
   const learnset = useMemo(() => learnsets.find(l => l.id === selectedSpecies?.id)?.learnset ?? {}, [learnsets, selectedSpecies]);
@@ -51,6 +52,7 @@ export const PokemonCard = ({
 
   const handleSpeciesChange = (value: string | null) => {
     setSpecies(value);
+    setSpriteLoaded(false);
     setSelectedMoves(Array(4).fill(null));
     setAbility(null);
     onChange(index, { species: value });
@@ -77,11 +79,12 @@ export const PokemonCard = ({
           <span className="flex place-items-center text-lg font-semibold text-foreground">
             {species ?? `Pokémon ${index + 1}`}
           </span>
-          {species && (
+          {species &&  (
             <img
               src={getSpriteUrl(species)}
               alt={species}
-              className="w-12 h-12 object-contain"
+              className={`w-12 h-12 object-contain transition-opacity duration-300 ${spriteLoaded === true ? 'opacity-100' : 'opacity-0 hidden'}`}
+              onLoad={() => setSpriteLoaded(true)}
             />
           )}
         </div>
@@ -98,7 +101,8 @@ export const PokemonCard = ({
               <img
                 src={getSpriteUrl(species)}
                 alt={species}
-                className="w-24 h-24 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.4"
+                className="w-24 h-24 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] transition-opacity duration-300 ${spriteLoaded ? 'opacity-100' : 'opacity-0 hidden'}"
+                onLoad={() => setSpriteLoaded(true)}
               />
             </div>
           )}
@@ -185,10 +189,10 @@ export const PokemonCard = ({
 
           {/* Advanced Content */}
           <div>
-            <label className="text-sm text-muted-light flex items-center gap-2 cursor-pointer">
+            <label className="text-sm text-muted-light flex justify-items-center items-start gap-2 cursor-pointer mb-4">
               <input
                 type="checkbox"
-                className="mb-4 cursor-pointer accent-accent-yellow"
+                className="cursor-pointer accent-accent-yellow mt-0.5"
                 checked={advancedIsChecked}
                 onChange={(e) => setAdvancedIsChecked(e.target.checked)}
               />

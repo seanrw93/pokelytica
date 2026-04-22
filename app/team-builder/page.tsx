@@ -1,4 +1,4 @@
-import { TeamBuilder } from "../components/TeamBuilder";
+import { TeamBuilder } from "../components/team-builder/TeamBuilder";
 import { getPokemon, getMoves, getItems, getAbilities, getNatures, getLearnsets } from "@/lib/data";
 
 export const dynamic = 'force-dynamic';
