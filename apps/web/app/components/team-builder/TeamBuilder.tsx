@@ -25,9 +25,11 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
     const [teamB, setTeamB] = useState<TeamSlot[]>(Array(6).fill(null));
     const [teamAKey, setTeamAKey] = useState(0);
     const [teamBKey, setTeamBKey] = useState(0);
-    const [result, setResult] = useState<BattleOutcome | null>(null);    
+    const [result, setResult] = useState<BattleOutcome | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [analysisLoading, setAnalysisLoading] = useState(false);
+    const [analysisError, setAnalysisError] = useState<string | null>(null);
 
     const targetRef = useRef<HTMLDivElement | null>(null);
 
@@ -74,13 +76,15 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
 
     const runSimulation = async (e: React.SubmitEvent | React.MouseEvent) => {
         e.preventDefault();
-        console.log("running simulation")
         setLoading(true);
         setError(null);
+        setAnalysisError(null);
+        setResult(null);
 
         const validA = teamA.filter(Boolean);
         const validB = teamB.filter(Boolean);
 
+        let stats;
         try {
             const res = await fetch('/api/simulate', {
                 method: 'POST',
@@ -88,18 +92,41 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                 body: JSON.stringify({ teamA: validA, teamB: validB })
             });
 
-            const data = await res.json();
+            stats = await res.json();
 
             if (!res.ok) {
-                setError(data.error);
+                setError(stats.error);
                 return;
             }
-            setResult(data);
+            setResult({ ...stats, analysis: null });
         } catch (err) {
             console.error("Error sending pkmn data: ", err);
             setError("Error sending pkmn data: " + err);
+            return;
         } finally {
             setLoading(false);
+        }
+
+        setAnalysisLoading(true);
+        try {
+            const res = await fetch('/api/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ teamA: validA, teamB: validB, ...stats })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                setAnalysisError(data.error ?? "Couldn't get AI analysis for this battle.");
+                return;
+            }
+            setResult(prev => prev ? { ...prev, analysis: data.analysis } : prev);
+        } catch (err) {
+            console.error("Error fetching analysis: ", err);
+            setAnalysisError("Error fetching analysis: " + err);
+        } finally {
+            setAnalysisLoading(false);
         }
     };
 
@@ -251,7 +278,13 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                         p2Wins={result.p2Wins}
                         ties={result.ties}
                     />
-                    <BattleAnalysis analysis={result.analysis} />
+                    {analysisLoading && <Spinner />}
+                    {analysisError && (
+                        <div className="text-center rounded-md border border-error bg-surface px-4 py-3 text-sm text-[var(--error)]">
+                            {analysisError}
+                        </div>
+                    )}
+                    {!analysisLoading && result.analysis && <BattleAnalysis analysis={result.analysis} />}
                 </div>
             )}
         </div>

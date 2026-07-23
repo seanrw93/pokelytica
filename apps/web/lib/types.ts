@@ -86,7 +86,7 @@ export interface DexLearnset {
   learnset: Record<string, string[]>
 }
 
-export interface BattleOutcome {
+export interface BattleStats {
   p1WinPct: string;
   p2WinPct: string;
   tiePct: string;
@@ -94,5 +94,12 @@ export interface BattleOutcome {
   p2Wins: number;
   ties: number;
   totalBattles: number;
-  analysis: string;
+  avgTurns: string;
+  topMoves: string;
+  faintSummary: string;
+  lastLog: string;
+}
+
+export interface BattleOutcome extends BattleStats {
+  analysis: string | null;
 }

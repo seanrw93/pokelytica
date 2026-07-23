@@ -17,6 +17,7 @@ export default defineConfig({
           root: "./apps/api",
           environment: "node",
           include: ["**/*.test.ts"],
+          setupFiles: ["./test/mockGroq.ts"],
         },
       },
       {
