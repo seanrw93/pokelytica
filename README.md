@@ -8,12 +8,14 @@ You build two teams of up to 6 Pokémon each using a team builder UI. Each Poké
 
 ## Tech stack
 
-- **Next.js** (App Router, TypeScript)
+- **Next.js** (App Router, TypeScript) — `apps/web`
+- **Koa** (TypeScript) — `apps/api`
+- **Prisma** + **Postgres** — `packages/db`, shared by both services
+- **Better Auth** — Google/GitHub OAuth + email magic link
 - **Tailwind CSS**
-- **@pkmn/sim** — Pokémon Showdown's battle engine
-- **@pkmn/dex** — Pokémon data layer
-- **@smogon/calc** — damage calculator
-- **Groq** (`llama-3.3-70b-versatile`) — battle analysis
+- **@pkmn/sim** — Pokémon Showdown's battle engine (runs in `apps/api`)
+- **@pkmn/dex** — Pokémon data layer (used by `apps/web`'s dex routes)
+- **Groq** (`llama-3.3-70b-versatile`) — battle analysis (runs in `apps/api`)
 - **@headlessui/react** — combobox components
 
 ## Getting started
@@ -31,23 +33,51 @@ cd pokelytica
 npm install
 ```
 
+This is an npm workspaces monorepo — one `npm install` at the root installs dependencies for both services below.
+
+## Services
+
+Pokelytica is split into two services plus a shared database package:
+
+- **`apps/web`** — the Next.js frontend (App Router). Serves the UI, the Pokémon dex data routes, auth (Better Auth), and thin proxy routes (`/api/simulate`, `/api/analyze`) that forward to `apps/api`.
+- **`apps/api`** — a Koa service that owns the actual battle simulation (`@pkmn/sim`) and the Groq-powered analysis call, plus tiered usage-quota enforcement on `/analyze`. Only reachable from `apps/web`, not directly from the browser.
+- **`packages/db`** — the Prisma schema and generated client, shared by both services.
+
 ### Environment variables
 
-Create a `.env.local` file in the root of the project:
+Each app has its own `.env` (gitignored) — copy the matching `.env.example` and fill in real values. Variable **names** only, see each `.env.example` for the exact format:
 
-```
-GROQ_API_KEY=your_groq_api_key_here
-```
+**`apps/web/.env`** (copy from `apps/web/.env.example`):
+- `API_URL` — where `apps/api` is running (`http://localhost:4000` locally)
+- `INTERNAL_API_SECRET` — shared secret so `apps/api` trusts requests forwarded from this server; must match `apps/api`'s value exactly
+- `DATABASE_URL` — Postgres connection string (same database as `apps/api`)
+- `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` — Better Auth session signing key and base URL
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` — Google OAuth app credentials
+- `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` — GitHub OAuth app credentials
+- `EMAIL_SERVER`, `EMAIL_FROM` — SMTP connection string and from-address used to send magic-link sign-in emails
+
+**`apps/api/.env`** (copy from `apps/api/.env.example`):
+- `PORT` — port the Koa service listens on (`4000` locally)
+- `GROQ_API_KEY` — your [Groq API key](https://console.groq.com), used for battle analysis
+- `DATABASE_URL` — same Postgres connection string as `apps/web`
+- `INTERNAL_API_SECRET` — must match `apps/web`'s value exactly
+
+**`packages/db/.env`** (copy from `packages/db/.env.example`):
+- `DATABASE_URL` — used by the Prisma CLI (`generate`, `migrate`, `seed`)
 
 ### Running locally
 
+Run both services in separate terminals:
+
 ```bash
-npm run dev
+npm run generate -w packages/db  # (one-time) build the Prisma client
+npm run dev -w api                # starts the Koa service on :4000
+npm run dev -w web                # starts the Next.js app on :3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser. `apps/web` proxies simulation and analysis requests to `apps/api` — both must be running for the team builder to work end to end.
 
-Note: the first request to the simulate endpoint will be slow in dev mode (~1-2 minutes) as Next.js compiles the heavy `@pkmn/sim` dependency on demand. Subsequent requests will be significantly faster.
+Note: the first simulate request will be slow (~1-2 minutes) as `apps/api` compiles the heavy `@pkmn/sim` dependency on demand. Subsequent requests will be significantly faster.
 
 ## How the simulation works
 
