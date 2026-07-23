@@ -10,7 +10,14 @@
     "dev": "npm run dev -w web",
     "build": "npm run build -w web",
     "start": "npm run start -w web",
-    "lint": "npm run lint -w web"
+    "lint": "npm run lint -w web",
+    "test": "npm run generate -w packages/db && vitest run",
+    "test:watch": "vitest",
+    "test:db:up": "docker compose -f docker-compose.test.yml up -d --wait",
+    "test:db:down": "docker compose -f docker-compose.test.yml down"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.10"
   },
   "allowScripts": {
     "esbuild@0.28.1": true,
