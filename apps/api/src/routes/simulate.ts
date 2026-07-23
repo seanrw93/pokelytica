@@ -1,8 +1,10 @@
 import Router from "@koa/router";
 import type { Context } from "koa";
 import { runBattles, type PokemonSlot } from "../lib/battleSim";
+import { requireInternalSecret } from "../middleware/requireInternalSecret";
 
 export const simulateRouter = new Router();
+simulateRouter.use(requireInternalSecret);
 
 simulateRouter.post("/simulate", async (ctx: Context) => {
   const { teamA, teamB } = ctx.request.body as { teamA?: PokemonSlot[]; teamB?: PokemonSlot[] };

@@ -7,7 +7,10 @@ export const POST = async (req: NextRequest) => {
 
   const res = await fetch(`${API_URL}/simulate`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-internal-api-secret": process.env.INTERNAL_API_SECRET ?? "",
+    },
     body,
   });
 
