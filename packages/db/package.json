@@ -2,11 +2,13 @@
   "name": "@pokelytica/db",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "main": "index.ts",
   "scripts": {
     "generate": "prisma generate",
     "migrate": "prisma migrate dev",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "test:reset": "tsx test/resetTestDb.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

@@ -17,7 +17,11 @@ export default defineConfig({
           root: "./apps/api",
           environment: "node",
           include: ["**/*.test.ts"],
-          setupFiles: ["../../packages/db/test/setup.ts", "./test/mockGroq.ts"],
+          setupFiles: [
+            "../../packages/db/test/setup.ts",
+            "./test/setupEnv.ts",
+            "./test/mockGroq.ts",
+          ],
         },
       },
       {
@@ -26,7 +30,6 @@ export default defineConfig({
           root: "./packages/db",
           environment: "node",
           include: ["**/*.test.ts"],
-          globalSetup: "./test/globalSetup.ts",
           setupFiles: ["./test/setup.ts"],
         },
       },
