@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname, "..", ".."), // apps/web -> apps -> monorepo root
   },
+  transpilePackages: ["@pokelytica/db"],
 };
 
 export default nextConfig;
