@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Base */
+  /* Base surfaces */
   --background: #0f0f1a;
   --surface: #1a1a2e;
   --surface-raised: #222240;
@@ -12,15 +12,24 @@
   --muted: #7878a0;
   --muted-light: #a0a0c0;
 
-  /* Brand accents */
-  --accent-red: #e3350d;
-  --accent-red-hover: #ff4520;
-  --accent-yellow: #ffcb05;
-  --accent-yellow-hover: #ffd83d;
-  --accent-blue: #3d7dca;
-  --accent-blue-hover: #5a99e8;
+  /* Brand accent — one considered accent, used everywhere: links, focus
+     rings, primary actions, active states. Do not introduce a second one. */
+  --accent: #22d3c4;
+  --accent-hover: #3ee6d6;
 
-  /* Pokémon type colours */
+  /* Semantic feedback — informational (win/loss, success/error), not brand
+     decoration, so it's allowed to differ from --accent. */
+  --positive: #3ecf8e;
+  --negative: #e2574f;
+  --negative-hover: #ec6b63;
+  --warning: #e0a83e;
+
+  --success: var(--positive);
+  --error: var(--negative);
+  --info: var(--accent);
+
+  /* Pokémon type colours (reference data — matches in-game type identity,
+     left as-is; these encode information, not brand). */
   --type-normal: #a8a878;
   --type-fire: #ff7c24;
   --type-water: #6390f0;
@@ -40,22 +49,13 @@
   --type-steel: #b7b7ce;
   --type-fairy: #d685ad;
 
-  /* Stat bar colours */
+  /* Stat bar colours (reference data, unchanged) */
   --stat-hp: #ff5959;
   --stat-attack: #f5ac78;
   --stat-defense: #fae078;
   --stat-sp-atk: #9db7f5;
   --stat-sp-def: #a7db8d;
   --stat-speed: #fa92b2;
-
-  /* UI feedback */
-  --success: #4caf82;
-  --warning: #ffcb05;
-  --error: #e3350d;
-  --info: #3d7dca;
-
-  /* Font */
-  --font-default: #e8e8f0;
 }
 
 @theme inline {
@@ -65,19 +65,26 @@
   --color-surface-raised: var(--surface-raised);
   --color-border: var(--border);
   --color-muted: var(--muted);
-  --color-accent-red: var(--accent-red);
-  --color-accent-yellow: var(--accent-yellow);
-  --color-accent-blue: var(--accent-blue);
+  --color-muted-light: var(--muted-light);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
+  --color-negative-hover: var(--negative-hover);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-info: var(--info);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-default-color: var(--font-default);
-  --font-pocket: var(--font-pocket-monk);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 body::before {

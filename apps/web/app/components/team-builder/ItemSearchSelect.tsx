@@ -33,7 +33,7 @@ export const ItemSearchSelect = ({
     <Combobox value={value} onChange={onChange}>
       <div className="relative">
         <Combobox.Input
-          className="w-full p-2 rounded bg-surface-raised border border-border text-foreground placeholder:text-muted disabled:text-muted disabled:cursor-not-allowed focus:outline-none focus:border-accent-blue transition-colors duration-150"
+          className="w-full p-2 rounded bg-surface-raised border border-border text-foreground placeholder:text-muted disabled:text-muted disabled:cursor-not-allowed focus:outline-none focus:border-accent transition-colors duration-150"
           onChange={(e) => setQuery(e.target.value)}
           displayValue={(val: string | null) => val ?? ""}
           placeholder={placeholder}
@@ -46,7 +46,7 @@ export const ItemSearchSelect = ({
             <Combobox.Option
               key={opt}
               value={opt}
-              className="cursor-pointer p-2 text-foreground hover:bg-surface-raised hover:text-accent-yellow transition-colors duration-100"
+              className="cursor-pointer p-2 text-foreground hover:bg-surface-raised hover:text-accent transition-colors duration-100"
             >
               {opt}
             </Combobox.Option>

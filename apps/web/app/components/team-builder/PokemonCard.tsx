@@ -141,7 +141,7 @@ export const PokemonCard = ({
                 setAbility(e.target.value);
                 onChange(index, { ability: e.target.value });
               }}
-              className="w-full mt-1 p-2 rounded bg-surface-raised border border-border text-foreground cursor-pointer disabled:text-muted disabled:cursor-not-allowed focus:outline-none focus:border-accent-blue transition-colors duration-150"
+              className="w-full mt-1 p-2 rounded bg-surface-raised border border-border text-foreground cursor-pointer disabled:text-muted disabled:cursor-not-allowed focus:outline-none focus:border-accent transition-colors duration-150"
               disabled={!species}
             >
               <option value="">Select an Ability</option>
@@ -161,7 +161,7 @@ export const PokemonCard = ({
                 setNature(e.target.value);
                 onChange(index, { nature: selected });
               }}
-              className="w-full mt-1 p-2 rounded bg-surface-raised border border-border text-foreground cursor-pointer focus:outline-none focus:border-accent-blue transition-colors duration-150"
+              className="w-full mt-1 p-2 rounded bg-surface-raised border border-border text-foreground cursor-pointer focus:outline-none focus:border-accent transition-colors duration-150"
             >
               <option value="">Select a Nature</option>
               {natures.map((n) => (
@@ -192,7 +192,7 @@ export const PokemonCard = ({
             <label className="text-sm text-muted-light flex justify-items-center items-start gap-2 cursor-pointer mb-4">
               <input
                 type="checkbox"
-                className="cursor-pointer accent-accent-yellow mt-0.5"
+                className="cursor-pointer accent-accent mt-0.5"
                 checked={advancedIsChecked}
                 onChange={(e) => setAdvancedIsChecked(e.target.checked)}
               />

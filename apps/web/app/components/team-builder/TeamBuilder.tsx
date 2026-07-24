@@ -153,7 +153,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                 >
                     Team Builder
                 </motion.h1>
-                <Link href="/battle-trainer" className="text-sm text-accent-yellow hover:underline">
+                <Link href="/battle-trainer" className="text-sm text-accent hover:underline">
                     Battle a Trainer →
                 </Link>
             </div>
@@ -175,7 +175,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                             delay: 0.3
                         }}
                     >
-                        <h2 className="text-xl font-semibold mb-4 text-accent-yellow">Player</h2>
+                        <h2 className="text-xl font-semibold mb-4 text-accent">Player</h2>
                         <div className="space-y-4">
                             {teamA.map((slot, i) => (
                             <div
@@ -215,7 +215,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                             delay: 0.3
                         }}
                     >
-                        <h2 className="text-xl font-semibold mb-4 text-accent-red">
+                        <h2 className="text-xl font-semibold mb-4 text-negative">
                             {opponentName ? `Opponent — ${opponentName}` : "Opponent"}
                         </h2>
                         <div className="space-y-4">
@@ -268,7 +268,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                         }}
                     >
                         <button
-                            className="w-full sm:w-auto bg-accent-yellow hover:bg-[var(--accent-yellow-hover)] disabled:opacity-40 disabled:cursor-not-allowed text-surface px-6 py-3 rounded-lg font-semibold sm:rounded-full transition-colors duration-200 cursor-pointer"
+                            className="w-full sm:w-auto bg-accent hover:bg-[var(--accent-hover)] disabled:opacity-40 disabled:cursor-not-allowed text-surface px-6 py-3 rounded-lg font-semibold sm:rounded-full transition-colors duration-200 cursor-pointer"
                             
                         >
                             Run simulation

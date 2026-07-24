@@ -55,15 +55,15 @@ const SignInPage = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="w-full bg-surface-raised border border-border rounded-lg px-4 py-2"
+            className="w-full bg-surface-raised border border-border rounded-lg px-4 py-2 focus:outline-none focus:border-accent transition-colors"
           />
           <button
             type="submit"
-            className="w-full bg-accent-yellow hover:bg-[var(--accent-yellow-hover)] text-surface px-4 py-2 rounded-lg font-semibold transition-colors"
+            className="w-full bg-accent hover:bg-accent-hover text-background px-4 py-2 rounded-lg font-semibold transition-colors"
           >
             Send magic link
           </button>
-          {error && <p className="text-sm text-[var(--error)]">{error}</p>}
+          {error && <p className="text-sm text-error">{error}</p>}
         </form>
       )}
     </div>

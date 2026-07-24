@@ -25,7 +25,7 @@ export const RemoveAllButton = ({ onRemoveAll }: RemoveAllButtonProps) => {
             onClick={handleClick}
             className={`w-full mb-2 sm:mb-0 sm:w-auto sm:mr-4 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 cursor-pointer
                 ${confirming
-                    ? 'bg-[var(--error)] hover:bg-[var(--accent-red-hover)] text-white'
+                    ? 'bg-[var(--error)] hover:bg-[var(--negative-hover)] text-white'
                     : 'bg-transparent border border-[var(--error)] text-[var(--error)] hover:bg-[var(--error)] hover:text-white'
                 }`}
         >

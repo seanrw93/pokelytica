@@ -28,7 +28,7 @@ const getRole = (title: string): Role => {
 };
 
 const selectClasses =
-  "p-2 rounded bg-surface-raised border border-border text-foreground focus:outline-none focus:border-accent-blue transition-colors duration-150";
+  "p-2 rounded bg-surface-raised border border-border text-foreground focus:outline-none focus:border-accent transition-colors duration-150";
 
 export const TrainerGrid = ({ trainers }: TrainerGridProps) => {
   const [search, setSearch] = useState("");
@@ -84,7 +84,7 @@ export const TrainerGrid = ({ trainers }: TrainerGridProps) => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search trainers..."
-          className="flex-1 min-w-[200px] p-2 rounded bg-surface-raised border border-border text-foreground placeholder:text-muted focus:outline-none focus:border-accent-blue transition-colors duration-150"
+          className="flex-1 min-w-[200px] p-2 rounded bg-surface-raised border border-border text-foreground placeholder:text-muted focus:outline-none focus:border-accent transition-colors duration-150"
         />
 
         <select
@@ -118,7 +118,7 @@ export const TrainerGrid = ({ trainers }: TrainerGridProps) => {
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="text-sm text-accent-yellow hover:underline"
+            className="text-sm text-accent hover:underline"
           >
             Clear filters
           </button>
