@@ -100,15 +100,18 @@ model Team {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// Stub — phase 2 fills in the curated gym leader / E4 / rival roster.
 model Trainer {
-  id        String   @id @default(cuid())
-  name      String
-  title     String?
-  team      Json
-  spriteRef String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(cuid())
+  name       String   @unique
+  title      String
+  generation Int
+  // Six PokemonSet-shaped entries (same shape as Team.slots) — snapshotted
+  // JSON, not normalized, for the same reason Team.slots isn't.
+  team       Json
+  // Key into @pkmn/img's trainer avatar sprite set (see packages/db/prisma/trainerSpriteIds.ts).
+  spriteId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   battleRecords BattleRecord[]
 }
