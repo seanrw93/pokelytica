@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { PiCaretDown, PiCaretUp } from "react-icons/pi";
 import { DexSpecies, DexMove, DexItem, DexAbility, DexNature, DexLearnset, Stats } from "@/lib/types";
 import { ItemSearchSelect } from "./ItemSearchSelect";
 import { StatEditor } from "./StatEditor";
@@ -16,6 +17,9 @@ type PokemonCardProps = {
   learnsets: DexLearnset[];
   onChange: (index: number, updated: any) => void;
 };
+
+const selectClasses =
+  "w-full mt-1 p-2 rounded-md bg-surface-raised border border-border text-foreground cursor-pointer disabled:text-muted disabled:cursor-not-allowed focus:outline-none focus:border-accent transition-colors duration-150";
 
 export const PokemonCard = ({
   index,
@@ -66,6 +70,8 @@ export const PokemonCard = ({
     onChange(index, { moves: updated });
   };
 
+  const summary = [item, ability].filter(Boolean).join(" · ");
+
   return (
     <div className="bg-surface rounded-lg border border-border">
 
@@ -73,22 +79,29 @@ export const PokemonCard = ({
       <button
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
-        className="w-full flex items-center justify-between p-4 text-left cursor-pointer hover:bg-surface-raised transition-colors duration-150 rounded-lg"
+        className="w-full flex items-center gap-3 p-3 text-left cursor-pointer hover:bg-surface-raised transition-colors duration-150 rounded-lg"
       >
-        <div className="flex justify-between w-full">
-          <span className="flex place-items-center text-lg font-semibold text-foreground">
-            {species ?? `Pokémon ${index + 1}`}
-          </span>
-          {species &&  (
+        {species && (
+          <div className="w-10 h-10 shrink-0 rounded-md bg-surface-raised flex items-center justify-center overflow-hidden">
             <img
               src={getSpriteUrl(species)}
               alt={species}
-              className={`w-12 h-12 object-contain transition-opacity duration-300 ${spriteLoaded === true ? 'opacity-100' : 'opacity-0 hidden'}`}
+              className={`w-9 h-9 object-contain transition-opacity duration-300 ${spriteLoaded === true ? 'opacity-100' : 'opacity-0'}`}
               onLoad={() => setSpriteLoaded(true)}
             />
+          </div>
+        )}
+
+        <div className="min-w-0 flex-1">
+          <div className="text-base font-semibold text-foreground truncate">
+            {species ?? `Pokémon ${index + 1}`}
+          </div>
+          {!isOpen && summary && (
+            <div className="text-xs font-mono text-muted truncate">{summary}</div>
           )}
         </div>
-        <span className="text-muted text-sm ml-3">{isOpen ? "▲" : "▼"}</span>
+
+        {isOpen ? <PiCaretUp className="text-muted w-4 h-4 shrink-0" /> : <PiCaretDown className="text-muted w-4 h-4 shrink-0" />}
       </button>
 
       {/* Collapsible Content */}
@@ -98,12 +111,14 @@ export const PokemonCard = ({
           {/* Sprite */}
           {species && (
             <div className="flex justify-center mb-2">
-              <img
-                src={getSpriteUrl(species)}
-                alt={species}
-                className="w-24 h-24 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] transition-opacity duration-300 ${spriteLoaded ? 'opacity-100' : 'opacity-0 hidden'}"
-                onLoad={() => setSpriteLoaded(true)}
-              />
+              <div className="w-24 h-24 rounded-md bg-surface-raised flex items-center justify-center overflow-hidden">
+                <img
+                  src={getSpriteUrl(species)}
+                  alt={species}
+                  className={`w-20 h-20 object-contain transition-opacity duration-300 ${spriteLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  onLoad={() => setSpriteLoaded(true)}
+                />
+              </div>
             </div>
           )}
 
@@ -141,7 +156,7 @@ export const PokemonCard = ({
                 setAbility(e.target.value);
                 onChange(index, { ability: e.target.value });
               }}
-              className="w-full mt-1 p-2 rounded bg-surface-raised border border-border text-foreground cursor-pointer disabled:text-muted disabled:cursor-not-allowed focus:outline-none focus:border-accent transition-colors duration-150"
+              className={selectClasses}
               disabled={!species}
             >
               <option value="">Select an Ability</option>
@@ -161,7 +176,7 @@ export const PokemonCard = ({
                 setNature(e.target.value);
                 onChange(index, { nature: selected });
               }}
-              className="w-full mt-1 p-2 rounded bg-surface-raised border border-border text-foreground cursor-pointer focus:outline-none focus:border-accent transition-colors duration-150"
+              className={selectClasses}
             >
               <option value="">Select a Nature</option>
               {natures.map((n) => (

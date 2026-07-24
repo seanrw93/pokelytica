@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { PiTrash, PiWarningCircle } from "react-icons/pi";
 
 type RemoveAllButtonProps = {
   onRemoveAll: () => void;
@@ -23,19 +24,20 @@ export const RemoveAllButton = ({ onRemoveAll }: RemoveAllButtonProps) => {
         <button
             type="button"
             onClick={handleClick}
-            className={`w-full mb-2 sm:mb-0 sm:w-auto sm:mr-4 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 cursor-pointer
+            className={`w-full mb-2 sm:mb-0 sm:w-auto sm:mr-4 px-4 py-2 rounded-md text-sm font-semibold transition-colors duration-150 cursor-pointer inline-flex items-center justify-center gap-2
                 ${confirming
                     ? 'bg-[var(--error)] hover:bg-[var(--negative-hover)] text-white'
                     : 'bg-transparent border border-[var(--error)] text-[var(--error)] hover:bg-[var(--error)] hover:text-white'
                 }`}
         >
+            {confirming ? <PiWarningCircle className="w-4 h-4" /> : <PiTrash className="w-4 h-4" />}
             {confirming ? 'Are you sure?' : 'Remove all Pokémon'}
         </button>
         {confirming && (
             <button
                 type="button"
                 onClick={() => setConfirming(false)}
-                className="w-full sm:w-auto px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 cursor-pointer bg-transparent border border-[var(--border)] text-[var(--muted)] hover:bg-[var(--surface-raised)] hover:text-[var(--foreground)]"
+                className="w-full sm:w-auto px-4 py-2 rounded-md text-sm font-semibold transition-colors duration-150 cursor-pointer bg-transparent border border-[var(--border)] text-[var(--muted)] hover:bg-[var(--surface-raised)] hover:text-[var(--foreground)]"
             >
                 Cancel
             </button>

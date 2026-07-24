@@ -164,7 +164,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                     
                     {/* Team A */}
                     <motion.div 
-                        className="bg-surface p-4 rounded-xl border border-border shadow-md"
+                        className="bg-surface p-4 rounded-lg border border-border shadow-md"
                         initial={{ x: -100, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{
@@ -204,7 +204,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
 
                     {/* Team B */}
                     <motion.div 
-                        className="bg-surface p-4 rounded-xl border border-border shadow-md"
+                        className="bg-surface p-4 rounded-lg border border-border shadow-md"
                         initial={{ x: 100, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{
@@ -216,7 +216,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                         }}
                     >
                         <h2 className="text-xl font-semibold mb-4 text-negative">
-                            {opponentName ? `Opponent — ${opponentName}` : "Opponent"}
+                            {opponentName ? `Opponent: ${opponentName}` : "Opponent"}
                         </h2>
                         <div className="space-y-4">
                             {teamB.map((slot, i) => (
@@ -246,14 +246,14 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                 </div>
 
                 {error && (
-                    <div className="mt-3 text-center rounded-md border border-error bg-surface px-4 py-3 text-sm text-[var(--error)]">
+                    <div className="mt-3 text-center rounded-md border border-error bg-surface px-4 py-3 text-sm text-error">
                         {error}
                     </div>
                 )}
 
                 {/* Run Simulation Button */}
                 {loading ? (
-                    <Spinner />
+                    <Spinner label="Simulating 100 battles..." />
                 ) : (
                     <motion.div
                         className="flex justify-center mt-8"
@@ -268,7 +268,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                         }}
                     >
                         <button
-                            className="w-full sm:w-auto bg-accent hover:bg-[var(--accent-hover)] disabled:opacity-40 disabled:cursor-not-allowed text-surface px-6 py-3 rounded-lg font-semibold sm:rounded-full transition-colors duration-200 cursor-pointer"
+                            className="w-full sm:w-auto bg-accent hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed text-surface px-6 py-3 rounded-lg font-semibold sm:rounded-full transition-colors duration-200 cursor-pointer"
                             
                         >
                             Run simulation
@@ -288,9 +288,9 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                         p2Wins={result.p2Wins}
                         ties={result.ties}
                     />
-                    {analysisLoading && <Spinner />}
+                    {analysisLoading && <Spinner label="Getting AI analysis..." />}
                     {analysisError && (
-                        <div className="text-center rounded-md border border-error bg-surface px-4 py-3 text-sm text-[var(--error)]">
+                        <div className="text-center rounded-md border border-error bg-surface px-4 py-3 text-sm text-error">
                             {analysisError}
                         </div>
                     )}
