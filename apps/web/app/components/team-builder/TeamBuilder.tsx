@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Link from "next/link";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DexSpecies, DexMove, DexItem, DexAbility, DexNature, TeamSlot, DexLearnset, BattleOutcome, Stats } from "@/lib/types";
 import { PokemonCard } from "./PokemonCard";
@@ -18,11 +19,13 @@ type TeamBuilderProps = {
   abilities: DexAbility[];
   natures: DexNature[];
   learnsets: DexLearnset[];
+  initialTeamB?: TeamSlot[];
+  opponentName?: string;
 };
 
-export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnsets }: TeamBuilderProps) => {
+export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnsets, initialTeamB, opponentName }: TeamBuilderProps) => {
     const [teamA, setTeamA] = useState<TeamSlot[]>(Array(6).fill(null));
-    const [teamB, setTeamB] = useState<TeamSlot[]>(Array(6).fill(null));
+    const [teamB, setTeamB] = useState<TeamSlot[]>(initialTeamB ?? Array(6).fill(null));
     const [teamAKey, setTeamAKey] = useState(0);
     const [teamBKey, setTeamBKey] = useState(0);
     const [result, setResult] = useState<BattleOutcome | null>(null);
@@ -135,20 +138,25 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
     return (
         <div className="p-6 space-y-8">
 
-            <motion.h1 
-                className="text-3xl font-bold text-foreground"
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{
-                    type: "spring",
-                    stiffness: 120,
-                    damping: 12,
-                    mass: 0.8,
-                    delay: 0.3
-                }}
-            >
-                Team Builder
-            </motion.h1>
+            <div className="flex items-center justify-between flex-wrap gap-3">
+                <motion.h1
+                    className="text-3xl font-bold text-foreground"
+                    initial={{ y: -100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{
+                        type: "spring",
+                        stiffness: 120,
+                        damping: 12,
+                        mass: 0.8,
+                        delay: 0.3
+                    }}
+                >
+                    Team Builder
+                </motion.h1>
+                <Link href="/battle-trainer" className="text-sm text-accent-yellow hover:underline">
+                    Battle a Trainer →
+                </Link>
+            </div>
 
             <form onSubmit={runSimulation}>
                 {/* Two-team responsive layout */}
@@ -207,7 +215,9 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                             delay: 0.3
                         }}
                     >
-                        <h2 className="text-xl font-semibold mb-4 text-accent-red">Opponent</h2>
+                        <h2 className="text-xl font-semibold mb-4 text-accent-red">
+                            {opponentName ? `Opponent — ${opponentName}` : "Opponent"}
+                        </h2>
                         <div className="space-y-4">
                             {teamB.map((slot, i) => (
                                 <div

@@ -1,10 +1,8 @@
-import { PrismaClient } from "@pokelytica/db";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { magicLink } from "better-auth/plugins";
 import nodemailer from "nodemailer";
-
-const prisma = new PrismaClient();
+import { prisma } from "./prisma";
 
 const mailer = nodemailer.createTransport(process.env.EMAIL_SERVER);
 

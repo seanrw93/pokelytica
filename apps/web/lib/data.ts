@@ -1,5 +1,6 @@
 import { dex } from "./dex"
 import { cache } from "react";
+import { prisma } from "./prisma";
 
 export const getPokemon = cache(() =>
     dex.species.all().map(s => ({
@@ -50,10 +51,19 @@ export const getItems = cache(() =>
         shortDesc: i.shortDesc,
     })));
 
-export const getNatures = cache(() => 
+export const getNatures = cache(() =>
     dex.natures.all().map(n => ({
         id: n.id,
         name: n.name,
         plus: n.plus,
         minus: n.minus
     })));
+
+export const getTrainers = cache(() =>
+    prisma.trainer.findMany({
+        orderBy: [{ generation: "asc" }, { name: "asc" }],
+        select: { id: true, name: true, title: true, generation: true, spriteId: true },
+    }));
+
+export const getTrainerByName = cache((name: string) =>
+    prisma.trainer.findUnique({ where: { name } }));

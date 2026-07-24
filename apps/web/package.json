@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@pkmn/dex": "^0.10.7",
+    "@pkmn/img": "^0.3.4",
     "@pokelytica/db": "*",
     "@tailwindcss/typography": "^0.5.19",
     "better-auth": "^1.6.25",
