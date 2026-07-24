@@ -190,6 +190,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                                     items={items}
                                     abilities={abilities}
                                     natures={natures}
+                                    initialValue={slot}
                                     onChange={(slotIndex, updated) =>
                                         updateTeam(teamA, setTeamA, slotIndex, updated)
                                     }
@@ -232,6 +233,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
                                         items={items}
                                         abilities={abilities}
                                         natures={natures}
+                                        initialValue={slot}
                                         onChange={(slotIndex, updated) =>
                                             updateTeam(teamB, setTeamB, slotIndex, updated)
                                         }

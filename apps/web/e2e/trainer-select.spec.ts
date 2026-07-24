@@ -23,3 +23,19 @@ test("trainer-select search narrows results without throwing", async ({ page }) 
 
   expect(errors).toEqual([]);
 });
+
+test("picking a trainer preloads their real team into the opponent slots", async ({ page }) => {
+  const errors = trackPageErrors(page);
+
+  await page.goto("/team-builder?trainer=Brock");
+
+  await expect(page.getByRole("heading", { name: "Opponent: Brock" })).toBeVisible();
+  // Brock's actual seeded roster, not the "Pokémon N" placeholder — proves the
+  // opponent cards read initial data from the loaded trainer instead of
+  // rendering blank while the simulation payload silently has the real team.
+  await expect(page.getByRole("button", { name: /Geodude/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Onix/ })).toBeVisible();
+  await expect(page.getByText(/Geodude.*Lv50/)).toBeVisible();
+
+  expect(errors).toEqual([]);
+});

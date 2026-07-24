@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { PiCaretDown, PiCaretUp } from "react-icons/pi";
-import { DexSpecies, DexMove, DexItem, DexAbility, DexNature, DexLearnset, Stats } from "@/lib/types";
+import { DexSpecies, DexMove, DexItem, DexAbility, DexNature, DexLearnset, PokemonSet, Stats } from "@/lib/types";
 import { ItemSearchSelect } from "./ItemSearchSelect";
 import { StatEditor } from "./StatEditor";
 import { getSpriteUrl } from "../../utils/getSprite";
@@ -15,11 +15,18 @@ type PokemonCardProps = {
   abilities: DexAbility[];
   natures: DexNature[];
   learnsets: DexLearnset[];
+  initialValue?: PokemonSet | null;
   onChange: (index: number, updated: any) => void;
 };
 
 const selectClasses =
   "w-full mt-1 p-2 rounded-md bg-surface-raised border border-border text-foreground cursor-pointer disabled:text-muted disabled:cursor-not-allowed focus:outline-none focus:border-accent transition-colors duration-150";
+
+const DEFAULT_EVS: Stats = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+const DEFAULT_IVS: Stats = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+
+const normalizeMoves = (moves?: (DexMove | null)[]): (DexMove | null)[] =>
+  Array.from({ length: 4 }, (_, i) => moves?.[i] ?? null);
 
 export const PokemonCard = ({
   index,
@@ -29,18 +36,20 @@ export const PokemonCard = ({
   items,
   abilities,
   natures,
+  initialValue,
   onChange
 }: PokemonCardProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
-  const [species, setSpecies] = useState<string | null>(null);
-  const [item, setItem] = useState<string | null>(null);
-  const [ability, setAbility] = useState<string | null>(null);
-  const [nature, setNature] = useState<string | null>(null);
-  const [selectedMoves, setSelectedMoves] = useState<(DexMove | null)[]>(Array(4).fill(null));
-  const [evs, setEvs] = useState<Stats>({ hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 });
-  const [ivs, setIvs] = useState<Stats>({ hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 });
-  const [advancedIsChecked, setAdvancedIsChecked] = useState(false);
+  const [species, setSpecies] = useState<string | null>(initialValue?.species || null);
+  const [item, setItem] = useState<string | null>(initialValue?.item || null);
+  const [ability, setAbility] = useState<string | null>(initialValue?.ability || null);
+  const [nature, setNature] = useState<string | null>(initialValue?.nature?.name ?? null);
+  const [level, setLevel] = useState<number>(initialValue?.level ?? 50);
+  const [selectedMoves, setSelectedMoves] = useState<(DexMove | null)[]>(normalizeMoves(initialValue?.moves));
+  const [evs, setEvs] = useState<Stats>(initialValue?.evs ?? DEFAULT_EVS);
+  const [ivs, setIvs] = useState<Stats>(initialValue?.ivs ?? DEFAULT_IVS);
+  const [advancedIsChecked, setAdvancedIsChecked] = useState(Boolean(initialValue));
   const [spriteLoaded, setSpriteLoaded] = useState<Boolean | null>(null);
 
   const selectedSpecies = useMemo(() => speciesList.find(s => s.name === species), [speciesList, species]);
@@ -70,6 +79,12 @@ export const PokemonCard = ({
     onChange(index, { moves: updated });
   };
 
+  const handleLevelChange = (value: number) => {
+    const clamped = Math.min(100, Math.max(1, value));
+    setLevel(clamped);
+    onChange(index, { level: clamped });
+  };
+
   const summary = [item, ability].filter(Boolean).join(" · ");
 
   return (
@@ -95,6 +110,7 @@ export const PokemonCard = ({
         <div className="min-w-0 flex-1">
           <div className="text-base font-semibold text-foreground truncate">
             {species ?? `Pokémon ${index + 1}`}
+            {species && <span className="text-muted font-mono font-normal"> · Lv{level}</span>}
           </div>
           {!isOpen && summary && (
             <div className="text-xs font-mono text-muted truncate">{summary}</div>
@@ -130,6 +146,19 @@ export const PokemonCard = ({
               value={species}
               onChange={(val) => handleSpeciesChange(val)}
               placeholder="Search Pokémon..."
+            />
+          </div>
+
+          {/* Level */}
+          <div>
+            <label className="text-sm text-muted-light">Level</label>
+            <input
+              type="number"
+              min={1}
+              max={100}
+              value={level}
+              onChange={(e) => handleLevelChange(Number(e.target.value))}
+              className="w-full mt-1 p-2 rounded-md bg-surface-raised border border-border text-foreground font-mono tabular-nums focus:outline-none focus:border-accent transition-colors duration-150"
             />
           </div>
 
@@ -234,8 +263,8 @@ export const PokemonCard = ({
                     min={0}
                     max={31}
                     onChange={(updated) => {
-                      setEvs(updated);
-                      onChange(index, { evs: updated });
+                      setIvs(updated);
+                      onChange(index, { ivs: updated });
                     }}
                   />
                 </div>
