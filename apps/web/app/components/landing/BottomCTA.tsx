@@ -2,16 +2,15 @@ import Link from "next/link";
 
 export const BottomCTA = () => {
   return (
-    <div className="flex flex-col items-center gap-4 text-center">
+    <div className="flex flex-col items-center gap-3 text-center border-t border-border pt-12">
       <Link
         href="/team-builder"
-        className="w-full sm:w-auto text-center bg-[#e3350d] hover:bg-[#ff4520] active:scale-95 transition text-white font-semibold px-6 sm:px-9 py-3 rounded-lg"
+        className="w-full sm:w-auto text-center bg-accent hover:bg-accent-hover active:scale-[0.98] transition text-background font-semibold px-6 sm:px-9 py-3 rounded-full"
       >
-        Start building →
+        Build your team
       </Link>
-
-      <p className="text-xs text-[#7878a0] px-4">
-        No account needed — just pick your Pokémon and go
+      <p className="text-xs text-muted px-4">
+        No account needed. Sign in only when you want AI analysis.
       </p>
     </div>
   );
