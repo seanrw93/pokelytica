@@ -38,4 +38,6 @@ jobs:
 
       - run: npm run generate -w packages/db
 
+      - run: npm run test:reset -w packages/db
+
       - run: npx vitest run
