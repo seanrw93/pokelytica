@@ -69,6 +69,17 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
        return team.some(slot => slot !== null && slot.species !== "");
     }
 
+    // Mirrors the backend's own validation (apps/api's /simulate rejects the
+    // same condition with a 422) so the user gets instant feedback, but the
+    // backend check is what actually matters — this is just UX.
+    const findIncompletePokemon = (team: TeamSlot[]): string | null => {
+        for (const slot of team) {
+            if (!slot || !slot.species) continue;
+            if (!slot.moves?.some(Boolean)) return slot.species;
+        }
+        return null;
+    };
+
     const handleRemoveAll = (
         setTeam: (t: TeamSlot[]) => void,
         setTeamKey: (updater: (k: number) => number) => void
@@ -79,10 +90,17 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
 
     const runSimulation = async (e: React.SubmitEvent | React.MouseEvent) => {
         e.preventDefault();
-        setLoading(true);
         setError(null);
         setAnalysisError(null);
         setResult(null);
+
+        const incomplete = findIncompletePokemon(teamA) ?? findIncompletePokemon(teamB);
+        if (incomplete) {
+            setError(`${incomplete} needs at least one move selected before you can run a simulation.`);
+            return;
+        }
+
+        setLoading(true);
 
         const validA = teamA.filter(Boolean);
         const validB = teamB.filter(Boolean);
@@ -98,7 +116,7 @@ export const TeamBuilder = ({ pokemon, moves, items, abilities, natures, learnse
             stats = await res.json();
 
             if (!res.ok) {
-                setError(stats.error);
+                setError(Array.isArray(stats.details) ? stats.details.join(" ") : stats.error);
                 return;
             }
             setResult({ ...stats, analysis: null });
