@@ -1,3 +1,6 @@
+// TODO(billing): this page isn't linked from the header/nav yet — billing
+// isn't wired up (Premium's button is a disabled "Coming soon"). Link it
+// from the account menu once the billing prompt lands.
 import Link from "next/link";
 import { PiCheck } from "react-icons/pi";
 

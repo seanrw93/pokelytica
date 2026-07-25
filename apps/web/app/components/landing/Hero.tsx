@@ -13,16 +13,6 @@ export const Hero = () => {
         animate="visible"
         className="flex flex-col gap-5 sm:gap-6"
       >
-        <motion.div variants={fadeUp} className="flex items-center gap-2.5">
-          <svg className="w-7 h-7" viewBox="0 0 72 72" fill="none">
-            <circle cx="36" cy="36" r="33" stroke="var(--border)" strokeWidth="2" fill="var(--surface)" />
-            <path d="M3 36 A33 33 0 0 1 69 36 L36 36 Z" fill="var(--accent)" opacity="0.9" />
-            <line x1="3" y1="36" x2="69" y2="36" stroke="var(--border)" strokeWidth="2" />
-            <circle cx="36" cy="36" r="8" fill="var(--surface)" stroke="var(--border)" strokeWidth="2" />
-          </svg>
-          <span className="text-lg font-bold tracking-tight text-foreground">Pokélytica</span>
-        </motion.div>
-
         <motion.h1 variants={fadeUp} className="text-4xl sm:text-5xl font-bold tracking-tight leading-[1.1] text-foreground">
           Simulate the matchup before you build the team.
         </motion.h1>
