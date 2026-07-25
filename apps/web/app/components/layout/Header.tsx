@@ -3,6 +3,7 @@
 import { useSession } from "@/lib/auth-client";
 import { BrandMark } from "./BrandMark";
 import { NavLinks } from "./NavLinks";
+import { AccountMenu } from "./AccountMenu";
 import { MobileMenu } from "./MobileMenu";
 
 export const Header = () => {
@@ -16,6 +17,7 @@ export const Header = () => {
 
         <div className="hidden md:flex items-center gap-8">
           <NavLinks showBattleHistory={showBattleHistory} ariaLabel="Primary" />
+          <AccountMenu />
         </div>
 
         <MobileMenu showBattleHistory={showBattleHistory} />

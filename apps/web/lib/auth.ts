@@ -22,6 +22,18 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     },
   },
+  user: {
+    additionalFields: {
+      // Exposes the existing User.tier column through the session/user
+      // payload so the header can show a tier badge without a second
+      // fetch. input: false — tier is server-assigned, never client-set.
+      tier: {
+        type: "string",
+        input: false,
+        defaultValue: "FREE",
+      },
+    },
+  },
   plugins: [
     magicLink({
       sendMagicLink: async ({ email, url }) => {
