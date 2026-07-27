@@ -57,6 +57,10 @@ export type ScoredMove = {
   score: number;
   /** Human-readable justification, used in debug output and tests. */
   why: string;
+  /** Set on damaging moves whose minimum roll KOs the target. */
+  koGuaranteed?: boolean;
+  /** Set when that KO also lands before the foe can act. */
+  koBeforeFoeActs?: boolean;
 };
 
 const scoreDamaging = (
@@ -79,11 +83,15 @@ const scoreDamaging = (
   const expected = (estimate.min + estimate.max) / 2;
   let score = Math.min(expected / foeCurHP, 1);
   let why = `expected ${(100 * expected) / foeCurHP | 0}% of current HP`;
+  let koGuaranteed = false;
+  let koBeforeFoeActs = false;
 
   if (estimate.min >= foeCurHP) {
+    koGuaranteed = true;
     score += SCORE.guaranteedKO;
     why = "guaranteed KO";
     if (actsFirst) {
+      koBeforeFoeActs = true;
       score += SCORE.koBeforeFoeActs;
       why = "guaranteed KO before the foe acts";
     }
@@ -92,7 +100,7 @@ const scoreDamaging = (
     why = "possible KO on a high roll";
   }
 
-  return { name: moveName, category: "damaging", score, why };
+  return { name: moveName, category: "damaging", score, why, koGuaranteed, koBeforeFoeActs };
 };
 
 const scoreSetup = (

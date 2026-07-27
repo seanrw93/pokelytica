@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { BattleStreams } from '@pkmn/sim';
 import { PokemonSet, DexMove } from '@/lib/types';
-import { RandomPlayerAI } from '@pkmn/sim';
+import { HeuristicPlayerAI, TeamSpec } from '@/lib/battle-ai/player';
 import Groq from 'groq-sdk';
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
@@ -88,8 +88,8 @@ const runSingleBattle = async (
     }
   })();
 
-  const p1AI = new RandomPlayerAI(streams.p1);
-  const p2AI = new RandomPlayerAI(streams.p2);
+  const p1AI = new HeuristicPlayerAI(streams.p1, { team: p1Team as TeamSpec[], opponentTeam: p2Team as TeamSpec[] });
+  const p2AI = new HeuristicPlayerAI(streams.p2, { team: p2Team as TeamSpec[], opponentTeam: p1Team as TeamSpec[] });
   void p1AI.start();
   void p2AI.start();
 
