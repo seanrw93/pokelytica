@@ -43,6 +43,43 @@ describe("estimateDamage", () => {
     const estimate = estimateDamage(attacker, flying, "Earthquake")!;
     expect(estimate.max).toBe(0);
   });
+
+  it("computes Endeavor from real current HP instead of the (broken) generic calc", () => {
+    // The exact regression: a Rattata brought to 1 HP by Focus Sash should
+    // project bringing a full-HP Garchomp down to 1 HP too, not 0 damage.
+    const rattata = mon({ species: "Rattata", hpFraction: 1 / 50 }); // ~1 HP of 50 max
+    const garchomp = mon({ species: "Garchomp" });
+
+    const estimate = estimateDamage(rattata, garchomp, "Endeavor")!;
+    const garchompMaxHP = estimate.max + 1; // Endeavor should leave exactly 1 HP.
+    expect(estimate.min).toBe(estimate.max);
+    expect(estimate.max).toBeGreaterThan(garchompMaxHP * 0.9);
+  });
+
+  it("Endeavor deals zero damage (fails) when the user's HP is not lower than the target's", () => {
+    const healthyRattata = mon({ species: "Rattata" });
+    const woundedGarchomp = mon({ species: "Garchomp", hpFraction: 0.1 });
+    const estimate = estimateDamage(healthyRattata, woundedGarchomp, "Endeavor")!;
+    expect(estimate.max).toBe(0);
+  });
+
+  it("computes Super Fang and Ruination as half the target's current HP, not zero", () => {
+    const attacker = mon({ species: "Rattata" });
+    const fullHP = mon({ species: "Garchomp" });
+    const halfHP = mon({ species: "Garchomp", hpFraction: 0.5 });
+
+    const superFang = estimateDamage(attacker, fullHP, "Super Fang")!;
+    expect(superFang.max).toBeGreaterThan(0);
+    expect(superFang.min).toBe(superFang.max);
+
+    const superFangAtHalf = estimateDamage(attacker, halfHP, "Super Fang")!;
+    // Two successive floor/round steps (HP fraction -> absolute, then half of
+    // that) can be off by a point from a clean halving — allow slack for that.
+    expect(Math.abs(superFangAtHalf.max - superFang.max / 2)).toBeLessThanOrEqual(1);
+
+    const ruination = estimateDamage(attacker, fullHP, "Ruination")!;
+    expect(ruination.max).toBe(superFang.max);
+  });
 });
 
 describe("projectWorstCaseIncoming", () => {

@@ -132,4 +132,19 @@ describe("scripted tactical scenarios", () => {
     );
     expect(chooseAction(rocksUp)).toMatchObject({ kind: "move", name: "Peck" });
   });
+
+  it("7. a Focus-Sashed Rattata at 1 HP uses Endeavor over Quick Attack against a full-power Garchomp", () => {
+    // The exact user-reported regression: Endeavor deals no meaningful damage
+    // through @smogon/calc's generic formula, so before the fix it always
+    // lost to Quick Attack's small-but-nonzero projected damage — meaning
+    // the Sash → Endeavor → priority-finisher combo never fired.
+    const snap = snapshot(
+      mon({ species: "Rattata", hpFraction: 1 / 50, moves: ["Endeavor", "Quick Attack"] }),
+      mon({ species: "Garchomp", moves: ["Earthquake"] }),
+      { selfBench: [] }
+    );
+
+    const action = chooseAction(snap);
+    expect(action).toMatchObject({ kind: "move", name: "Endeavor" });
+  });
 });
