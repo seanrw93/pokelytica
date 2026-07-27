@@ -43,7 +43,7 @@ export const ItemSearchSelect = ({
           required={required}
         />
 
-        <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-surface border border-border shadow-lg shadow-black/40">
+        <Combobox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-surface border border-border shadow-lg shadow-black/40">
           {filtered.map((opt) => (
             <Combobox.Option
               key={opt}
