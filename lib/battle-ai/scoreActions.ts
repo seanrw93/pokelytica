@@ -1,5 +1,5 @@
 import { classifyMove, type MoveCategory } from "./classifyMove";
-import { estimateDamage, projectWorstCaseIncoming, toCalcPokemon, type IncomingProjection } from "./projection";
+import { estimateDamage, toCalcPokemon, type IncomingProjection } from "./projection";
 import type { BattleSnapshot, PokemonState } from "./state";
 import { gen9 } from "./dex";
 
